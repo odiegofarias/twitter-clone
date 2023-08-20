@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 # symmetrical = False significa que eu posso seguir alguém, mas a pessoa não precisa me seguir necessariamente
+# related_name faz a relação contrária, verifica quem está te seguindo
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField(
