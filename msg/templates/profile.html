@@ -7,6 +7,11 @@
             <div class="row">
                 <div class="col-8">
                     <h1>{{ profile.user.username }} Perfil</h1>
+                    {% for msg in msgs %}
+                    <div class="alert alert-dark" role="alert">
+                        {{ msg.body }}
+                      </div>
+                    {% endfor %}
                 </div>
                 <div class="col-4">
                     <div class="card">

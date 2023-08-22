@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Message
 
 
 def home(request):
-    return render(request, 'home.html')
+    if request.user.is_authenticated:
+        msgs = Message.objects.all().order_by('-created_at')
+
+    return render(request, 'home.html', {'msgs': msgs})
 
 # TODO: Criar um login required
 def profile_list(request):
@@ -19,6 +22,7 @@ def profile_list(request):
 def profile(request, pk):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user_id=pk)
+        msgs = Message.objects.filter(user_id=pk).order_by('-created_at')
 
         # Post form Logic
         if request.method == "POST":
@@ -35,7 +39,7 @@ def profile(request, pk):
             # Save the profile
             current_user_profile.save()
 
-        return render(request, 'profile.html', {'profile': profile})
+        return render(request, 'profile.html', {'profile': profile, 'msgs': msgs})
 
     else:
         messages.success(request, 'Você precisa estar logado para visualizar está página.')
