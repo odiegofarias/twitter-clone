@@ -7,14 +7,18 @@
             <div class="row">
                 <div class="col-8">
                     <h1>{{ profile.user.username }} Perfil</h1>
-                    {% for msg in msgs %}
-                    <div class="alert alert-dark" role="alert">
-                        {{ msg.body }}
-                      </div>
-                    {% endfor %}
+                    {% if msgs %}
+                      {% for msg in msgs %}
+                      <div class="alert alert-dark" role="alert">
+                          {{ msg.body }} <br><strong><small>{{ msg.created_at }}</small> </strong> 
+                        </div>
+                      {% endfor %}
+                    {% endif %}
                 </div>
+                
                 <div class="col-4">
-                    <div class="card">
+                  <br><br>
+                    <div class="card mt-2">          
                         <h5 class="card-header">Seguindo</h5>
                         <div class="card-body">
                           <p class="card-text">
@@ -41,7 +45,7 @@
                         {% csrf_token %}
                         {% if profile in user.profile.follows.all %}
 
-                          <button class="btn btn-success" name="follow" value="follow" type="submit" disabled>
+                          <button class="btn btn-success mt-2" name="follow" value="follow" type="submit" disabled>
                           Seguindo @{{ profile.user.username }} </button>
                            
                           <button class="btn btn-outline-danger mt-2" name="follow" value="unfollow" type="submit">
