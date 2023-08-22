@@ -31,6 +31,23 @@
                           </p>
                         </div>
                       </div>
+                      <br>
+                      <form action="" method="post">
+                        {% csrf_token %}
+                        {% if profile in user.profile.follows.all %}
+
+                          <button class="btn btn-success" name="follow" value="follow" type="submit" disabled>
+                          Seguindo @{{ profile.user.username }} </button>
+                           
+                          <button class="btn btn-outline-danger mt-2" name="follow" value="unfollow" type="submit">
+                            Deixar de seguir @{{ profile.user.username }} </button>
+         
+                        {% else %}
+                        <button class="btn btn-outline-success" name="follow" value="follow" type="submit">
+                          Seguir @{{ profile.user.username }} </button>
+                        {% endif %}
+                      </form>
+                      <br>
                 </div>
             </div>
         </div>
