@@ -2,11 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Profile, Message
 from .forms import MessageForm
+from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
+    # TODO: Criar login required e melhorar essa exibição.
+    msgs = Message.objects.all().order_by('-created_at')
+
     if request.user.is_authenticated:
-        msgs = Message.objects.all().order_by('-created_at')
+        
         form = MessageForm(request.POST or None)
 
         if request.method == "POST":
@@ -58,3 +62,31 @@ def profile(request, pk):
         messages.success(request, 'Você precisa estar logado para visualizar está página.')
 
         return redirect('home')
+    
+def login_page(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+
+            messages.success(request, 'Login efetuado com sucesso.')
+
+            return redirect('home')
+        
+        else:
+            messages.success(request, 'Algum erro ocorreu. Tente novamente.')
+
+            return redirect('login_page')
+    else:
+        return render(request, 'login.html')
+
+def logout_page(request):
+    logout(request)
+
+    messages.success(request, 'Você saiu.')
+
+    return redirect('home')
